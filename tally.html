@@ -10,12 +10,12 @@
             --primary: #8b5cf6;
             --primary-light: #a78bfa;
             --primary-dark: #7c3aed;
-            --secondary: #34d399;
-            --secondary-light: #6ee7b7;
-            --danger: #f87171;
-            --danger-light: #fca5a5;
-            --warning: #fbbf24;
-            --warning-light: #fcd34d;
+            --secondary: #64748b;
+            --secondary-light: #94a3b8;
+            --danger: #475569;
+            --danger-light: #64748b;
+            --warning: #475569;
+            --warning-light: #64748b;
             --bg-primary: #0f172a;
             --bg-secondary: #1e293b;
             --bg-tertiary: #334155;
@@ -43,6 +43,7 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            width: 100%;
         }
 
         header {
@@ -88,6 +89,7 @@
             display: flex;
             gap: 15px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -123,24 +125,78 @@
             transform: translateY(-2px);
         }
 
-        /* Dynamic grid layout */
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-light);
+            transform: translateY(-2px);
+        }
+
+        .btn.active {
+            background-color: var(--primary);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .view-controls {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .view-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--bg-secondary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .view-btn:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .view-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Grid View */
         .counters-grid {
             display: grid;
             gap: 20px;
             transition: all 0.3s ease;
+            width: 100%;
         }
 
-        /* Grid layouts for different counter counts */
+        /* Grid layouts for different counter counts - RESPONSIVE */
         .counters-grid.one-counter { 
             grid-template-columns: 1fr; 
             max-width: 400px;
             margin: 0 auto;
         }
-        .counters-grid.two-counters { grid-template-columns: repeat(2, 1fr); }
-        .counters-grid.three-counters { grid-template-columns: repeat(3, 1fr); }
-        .counters-grid.four-counters { grid-template-columns: repeat(4, 1fr); }
-        .counters-grid.five-counters { grid-template-columns: repeat(5, 1fr); }
-        .counters-grid.six-plus-counters { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .counters-grid.two-counters { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        .counters-grid.three-counters { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .counters-grid.four-counters { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+        .counters-grid.five-counters { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+        .counters-grid.six-plus-counters { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+
+        /* List View */
+        .counters-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 100%;
+        }
 
         .counter-card {
             background-color: var(--bg-secondary);
@@ -152,6 +208,16 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            position: relative;
+            width: 100%;
+        }
+
+        .counters-list .counter-card {
+            flex-direction: row;
+            align-items: center;
+            padding: 15px 20px;
+            gap: 15px;
+            min-height: auto;
         }
 
         .counter-card:hover {
@@ -165,6 +231,12 @@
             margin-bottom: 15px;
         }
 
+        .counters-list .counter-header {
+            margin-bottom: 0;
+            flex: 1;
+            min-width: 0; /* Prevents flex item from overflowing */
+        }
+
         .counter-name {
             font-size: 1.1rem;
             font-weight: 600;
@@ -175,6 +247,13 @@
             padding: 5px;
             border-radius: 4px;
             text-overflow: ellipsis;
+            min-width: 0; /* Allows text truncation */
+        }
+
+        .counters-list .counter-name {
+            width: 120px; /* Fixed width for list view */
+            font-size: 1rem;
+            flex-shrink: 0;
         }
 
         .counter-name:focus {
@@ -185,26 +264,74 @@
         .counter-actions {
             display: flex;
             gap: 8px;
+            position: relative;
+            flex-shrink: 0;
         }
 
-        .counter-btn {
+        .menu-btn {
             background: none;
             border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1.2rem;
             transition: color 0.3s;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
-        .counter-btn:hover {
+        .menu-btn:hover {
             color: var(--text-primary);
             background-color: var(--bg-tertiary);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: var(--shadow);
+            z-index: 10;
+            min-width: 160px;
+            display: none;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border: none;
+            background: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .dropdown-item.delete {
+            color: #f87171;
+        }
+
+        .dropdown-item.delete:hover {
+            background-color: rgba(239, 68, 68, 0.1);
         }
 
         .counter-value {
@@ -219,13 +346,22 @@
             justify-content: center;
         }
 
-        /* Dynamic font sizes based on counter count */
-        .one-counter .counter-value { font-size: 4rem; }
-        .two-counters .counter-value { font-size: 3.5rem; }
-        .three-counters .counter-value { font-size: 3rem; }
-        .four-counters .counter-value { font-size: 2.5rem; }
-        .five-counters .counter-value { font-size: 2.2rem; }
-        .six-plus-counters .counter-value { font-size: 2rem; }
+        .counters-list .counter-value {
+            margin: 0;
+            font-size: 1.8rem;
+            min-width: 60px;
+            max-width: 80px;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Dynamic font sizes based on counter count for grid view */
+        .counters-grid.one-counter .counter-value { font-size: 4rem; }
+        .counters-grid.two-counters .counter-value { font-size: 3.5rem; }
+        .counters-grid.three-counters .counter-value { font-size: 3rem; }
+        .counters-grid.four-counters .counter-value { font-size: 2.5rem; }
+        .counters-grid.five-counters .counter-value { font-size: 2.2rem; }
+        .counters-grid.six-plus-counters .counter-value { font-size: 2rem; }
 
         .counter-value.animate {
             transform: scale(1.1);
@@ -238,15 +374,28 @@
             gap: 8px;
         }
 
+        .counters-list .counter-controls {
+            gap: 8px;
+            margin-left: auto;
+            flex-shrink: 0;
+            min-width: 120px;
+        }
+
         .counter-controls button {
             flex: 1;
-            padding: 8px;
+            padding: 12px;
             border: none;
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: var(--shadow);
+            font-size: 1rem;
+        }
+
+        .counters-list .counter-controls button {
+            padding: 8px 12px;
+            min-width: 45px;
             font-size: 0.9rem;
         }
 
@@ -261,22 +410,12 @@
         }
 
         .decrement-btn {
-            background-color: var(--warning);
+            background-color: #4f46e5;
             color: white;
         }
 
         .decrement-btn:hover {
-            background-color: var(--warning-light);
-            transform: translateY(-2px);
-        }
-
-        .reset-btn {
-            background-color: var(--danger);
-            color: white;
-        }
-
-        .reset-btn:hover {
-            background-color: var(--danger-light);
+            background-color: #6366f1;
             transform: translateY(-2px);
         }
 
@@ -298,23 +437,139 @@
             margin-bottom: 10px;
         }
 
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.confirm {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .modal-btn.confirm:hover {
+            background-color: var(--primary-light);
+        }
+
+        .modal-btn.cancel {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .modal-btn.cancel:hover {
+            background-color: var(--danger-light);
+        }
+
         /* Responsive adjustments */
         @media (max-width: 1200px) {
-            .counters-grid.four-counters { grid-template-columns: repeat(3, 1fr); }
-            .counters-grid.five-counters { grid-template-columns: repeat(3, 1fr); }
-            .counters-grid.six-plus-counters { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+            .container {
+                max-width: 100%;
+                padding: 0 15px;
+            }
+            
+            .counters-grid.four-counters,
+            .counters-grid.five-counters,
+            .counters-grid.six-plus-counters { 
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            }
         }
 
         @media (max-width: 900px) {
-            .counters-grid.three-counters { grid-template-columns: repeat(2, 1fr); }
-            .counters-grid.four-counters { grid-template-columns: repeat(2, 1fr); }
-            .counters-grid.five-counters { grid-template-columns: repeat(2, 1fr); }
-            .counters-grid.six-plus-counters { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+            .counters-grid.three-counters,
+            .counters-grid.four-counters,
+            .counters-grid.five-counters,
+            .counters-grid.six-plus-counters { 
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            }
+            
+            .counters-list .counter-card {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .counters-list .counter-header {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .counters-list .counter-controls {
+                margin-left: 0;
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .counters-list .counter-name {
+                width: 100%;
+                text-align: center;
+            }
         }
 
         @media (max-width: 768px) {
             .counters-grid {
-                grid-template-columns: 1fr !important;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+                gap: 15px;
             }
             
             header {
@@ -328,13 +583,43 @@
             }
             
             .counter-value {
-                font-size: 3rem !important;
+                font-size: 2.5rem !important;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .view-controls {
+                margin-left: 0;
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .counters-list .counter-card {
+                padding: 12px;
+            }
+            
+            .counters-list .counter-value {
+                font-size: 1.5rem;
+                min-width: 50px;
+            }
+            
+            .counters-list .counter-controls button {
+                padding: 6px 10px;
+                min-width: 40px;
+                font-size: 0.8rem;
             }
         }
 
         @media (max-width: 480px) {
-            .container {
+            body {
                 padding: 10px;
+            }
+            
+            .container {
+                padding: 0 10px;
             }
             
             .controls {
@@ -343,6 +628,41 @@
             
             .btn {
                 justify-content: center;
+                padding: 10px 16px;
+            }
+            
+            .counters-list .counter-card {
+                padding: 10px;
+            }
+            
+            .counters-list .counter-name {
+                width: 100px;
+                font-size: 0.9rem;
+            }
+            
+            .counter-card {
+                padding: 15px;
+            }
+            
+            .counters-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .counters-list .counter-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .counters-list .counter-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .counters-list .counter-controls {
+                margin-left: 0;
+                width: 100%;
             }
         }
     </style>
@@ -363,35 +683,72 @@
             <button class="btn btn-danger" id="resetAllBtn">
                 <i class="fas fa-trash"></i> Reset All Counters
             </button>
+            <div class="view-controls">
+                <button class="view-btn active" id="gridViewBtn" title="Grid View">
+                    <i class="fas fa-th"></i>
+                </button>
+                <button class="view-btn" id="listViewBtn" title="List View">
+                    <i class="fas fa-list"></i>
+                </button>
+            </div>
         </div>
 
-        <div class="counters-grid" id="countersGrid">
+        <div class="counters-grid" id="countersContainer">
             <!-- Counters will be added here dynamically -->
+        </div>
+    </div>
+
+    <!-- Set Value Modal -->
+    <div class="modal" id="setValueModal">
+        <div class="modal-content">
+            <h3>Set Counter Value</h3>
+            <input type="number" class="modal-input" id="setValueInput" placeholder="Enter new value" min="0">
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" id="cancelSetValue">Cancel</button>
+                <button class="modal-btn confirm" id="confirmSetValue">Set Value</button>
+            </div>
         </div>
     </div>
 
     <script>
         // DOM Elements
-        const countersGrid = document.getElementById('countersGrid');
+        const countersContainer = document.getElementById('countersContainer');
         const addCounterBtn = document.getElementById('addCounterBtn');
         const resetAllBtn = document.getElementById('resetAllBtn');
         const themeToggle = document.getElementById('themeToggle');
+        const gridViewBtn = document.getElementById('gridViewBtn');
+        const listViewBtn = document.getElementById('listViewBtn');
+        const setValueModal = document.getElementById('setValueModal');
+        const setValueInput = document.getElementById('setValueInput');
+        const cancelSetValue = document.getElementById('cancelSetValue');
+        const confirmSetValue = document.getElementById('confirmSetValue');
 
         // Counter state
         let counters = [];
         let counterId = 0;
+        let activeMenu = null;
+        let currentCounterId = null;
+        let currentView = 'grid'; // 'grid' or 'list'
 
         // Initialize from cookies if available
         function initializeFromCookies() {
             const countersCookie = getCookie('multiCounters');
+            const viewCookie = getCookie('multiCountersView');
+            
             if (countersCookie) {
                 counters = JSON.parse(countersCookie);
                 counterId = counters.length > 0 ? Math.max(...counters.map(c => c.id)) + 1 : 0;
-                renderCounters();
             } else {
                 // Create a default counter if no cookies exist
                 addCounter();
             }
+            
+            if (viewCookie) {
+                currentView = viewCookie;
+                updateViewButtons();
+            }
+            
+            renderCounters();
         }
 
         // Cookie functions
@@ -422,29 +779,113 @@
         // Save counters to cookies
         function saveCounters() {
             setCookie('multiCounters', counters);
+            setCookie('multiCountersView', currentView);
         }
 
-        // Update grid layout based on number of counters
+        // Update view buttons state
+        function updateViewButtons() {
+            gridViewBtn.classList.toggle('active', currentView === 'grid');
+            listViewBtn.classList.toggle('active', currentView === 'list');
+        }
+
+        // Switch to grid view
+        function switchToGridView() {
+            currentView = 'grid';
+            countersContainer.className = 'counters-grid';
+            updateViewButtons();
+            renderCounters();
+            saveCounters();
+        }
+
+        // Switch to list view
+        function switchToListView() {
+            currentView = 'list';
+            countersContainer.className = 'counters-list';
+            updateViewButtons();
+            renderCounters();
+            saveCounters();
+        }
+
+        // Update grid layout based on number of counters (for grid view only)
         function updateGridLayout() {
+            if (currentView !== 'grid') return;
+            
             const count = counters.length;
             
             // Remove all layout classes
-            countersGrid.classList.remove('one-counter', 'two-counters', 'three-counters', 'four-counters', 'five-counters', 'six-plus-counters');
+            countersContainer.classList.remove('one-counter', 'two-counters', 'three-counters', 'four-counters', 'five-counters', 'six-plus-counters');
             
             // Add the appropriate layout class
             if (count === 1) {
-                countersGrid.classList.add('one-counter');
+                countersContainer.classList.add('one-counter');
             } else if (count === 2) {
-                countersGrid.classList.add('two-counters');
+                countersContainer.classList.add('two-counters');
             } else if (count === 3) {
-                countersGrid.classList.add('three-counters');
+                countersContainer.classList.add('three-counters');
             } else if (count === 4) {
-                countersGrid.classList.add('four-counters');
+                countersContainer.classList.add('four-counters');
             } else if (count === 5) {
-                countersGrid.classList.add('five-counters');
+                countersContainer.classList.add('five-counters');
             } else if (count >= 6) {
-                countersGrid.classList.add('six-plus-counters');
+                countersContainer.classList.add('six-plus-counters');
             }
+        }
+
+        // Toggle dropdown menu
+        function toggleMenu(counterId, event) {
+            event.stopPropagation();
+            
+            // Close any other open menus
+            if (activeMenu && activeMenu !== counterId) {
+                const previousMenu = document.querySelector(`[data-counter-id="${activeMenu}"] .dropdown-menu`);
+                if (previousMenu) {
+                    previousMenu.classList.remove('show');
+                }
+            }
+            
+            const menu = document.querySelector(`[data-counter-id="${counterId}"] .dropdown-menu`);
+            if (menu) {
+                menu.classList.toggle('show');
+                activeMenu = menu.classList.contains('show') ? counterId : null;
+            }
+        }
+
+        // Close all dropdown menus
+        function closeAllMenus() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+            activeMenu = null;
+        }
+
+        // Show set value modal
+        function showSetValueModal(counterId) {
+            currentCounterId = counterId;
+            const counter = counters.find(c => c.id === counterId);
+            if (counter) {
+                setValueInput.value = counter.value;
+                setValueModal.classList.add('show');
+                setValueInput.focus();
+                closeAllMenus();
+            }
+        }
+
+        // Set counter value from modal
+        function setCounterValue() {
+            if (currentCounterId === null) return;
+            
+            const value = parseInt(setValueInput.value);
+            if (!isNaN(value) && value >= 0) {
+                const counter = counters.find(c => c.id === currentCounterId);
+                if (counter) {
+                    counter.value = value;
+                    animateCounterValue(currentCounterId);
+                    saveCounters();
+                    renderCounters();
+                }
+            }
+            setValueModal.classList.remove('show');
+            currentCounterId = null;
         }
 
         // Add a new counter
@@ -465,6 +906,18 @@
             counters = counters.filter(counter => counter.id !== id);
             renderCounters();
             saveCounters();
+            closeAllMenus();
+        }
+
+        // Reset counter value
+        function resetCounterValue(id) {
+            const counter = counters.find(c => c.id === id);
+            if (counter) {
+                counter.value = 0;
+                animateCounterValue(id);
+                saveCounters();
+                closeAllMenus();
+            }
         }
 
         // Increment counter value
@@ -482,16 +935,6 @@
             const counter = counters.find(c => c.id === id);
             if (counter && counter.value > 0) {
                 counter.value--;
-                animateCounterValue(id);
-                saveCounters();
-            }
-        }
-
-        // Reset counter value
-        function resetCounter(id) {
-            const counter = counters.find(c => c.id === id);
-            if (counter) {
-                counter.value = 0;
                 animateCounterValue(id);
                 saveCounters();
             }
@@ -531,12 +974,14 @@
             }
         }
 
-        // Render all counters
+        // Render all counters based on current view
         function renderCounters() {
-            updateGridLayout();
+            if (currentView === 'grid') {
+                updateGridLayout();
+            }
             
             if (counters.length === 0) {
-                countersGrid.innerHTML = `
+                countersContainer.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-tally"></i>
                         <h3>No counters yet</h3>
@@ -546,7 +991,7 @@
                 return;
             }
 
-            countersGrid.innerHTML = counters.map(counter => `
+            countersContainer.innerHTML = counters.map(counter => `
                 <div class="counter-card" data-counter-id="${counter.id}">
                     <div class="counter-header">
                         <input 
@@ -556,18 +1001,26 @@
                             onchange="updateCounterName(${counter.id}, this.value)"
                         >
                         <div class="counter-actions">
-                            <button class="counter-btn" onclick="removeCounter(${counter.id})" title="Delete counter">
-                                <i class="fas fa-trash"></i>
+                            <button class="menu-btn" onclick="toggleMenu(${counter.id}, event)" title="Menu">
+                                <i class="fas fa-ellipsis-v"></i>
                             </button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item" onclick="showSetValueModal(${counter.id})">
+                                    <i class="fas fa-edit"></i> Set Value
+                                </button>
+                                <button class="dropdown-item" onclick="resetCounterValue(${counter.id})">
+                                    <i class="fas fa-redo"></i> Reset Counter
+                                </button>
+                                <button class="dropdown-item delete" onclick="removeCounter(${counter.id})">
+                                    <i class="fas fa-trash"></i> Delete Counter
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="counter-value">${counter.value}</div>
                     <div class="counter-controls">
                         <button class="decrement-btn" onclick="decrementCounter(${counter.id})">
                             <i class="fas fa-minus"></i>
-                        </button>
-                        <button class="reset-btn" onclick="resetCounter(${counter.id})">
-                            <i class="fas fa-redo"></i>
                         </button>
                         <button class="increment-btn" onclick="incrementCounter(${counter.id})">
                             <i class="fas fa-plus"></i>
@@ -607,6 +1060,31 @@
         addCounterBtn.addEventListener('click', addCounter);
         resetAllBtn.addEventListener('click', resetAllCounters);
         themeToggle.addEventListener('click', toggleTheme);
+        gridViewBtn.addEventListener('click', switchToGridView);
+        listViewBtn.addEventListener('click', switchToListView);
+        confirmSetValue.addEventListener('click', setCounterValue);
+        cancelSetValue.addEventListener('click', () => {
+            setValueModal.classList.remove('show');
+            currentCounterId = null;
+        });
+
+        // Close modal when clicking outside
+        setValueModal.addEventListener('click', (e) => {
+            if (e.target === setValueModal) {
+                setValueModal.classList.remove('show');
+                currentCounterId = null;
+            }
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', closeAllMenus);
+
+        // Handle Enter key in set value input
+        setValueInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                setCounterValue();
+            }
+        });
 
         // Initialize the app
         initializeFromCookies();
