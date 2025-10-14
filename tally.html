@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Counter Tally</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --primary-dark: #7c3aed;
+            --secondary: #34d399;
+            --secondary-light: #6ee7b7;
+            --danger: #f87171;
+            --danger-light: #fca5a5;
+            --warning: #fbbf24;
+            --warning-light: #fcd34d;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --border-color: #475569;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--primary-light), var(--secondary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: none;
+            color: var(--text-primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            background-color: var(--primary-light);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger-light);
+            transform: translateY(-2px);
+        }
+
+        .counters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .counter-card {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        .counter-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .counter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .counter-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            background: none;
+            border: none;
+            width: 70%;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        .counter-name:focus {
+            outline: 1px solid var(--primary-light);
+            background-color: var(--bg-tertiary);
+        }
+
+        .counter-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .counter-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.3s;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .counter-btn:hover {
+            color: var(--text-primary);
+            background-color: var(--bg-tertiary);
+        }
+
+        .counter-value {
+            font-size: 3.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--primary-light);
+            transition: all 0.2s;
+        }
+
+        .counter-value.animate {
+            transform: scale(1.1);
+            color: var(--secondary-light);
+        }
+
+        .counter-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .counter-controls button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+
+        .increment-btn {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .increment-btn:hover {
+            background-color: var(--secondary-light);
+            transform: translateY(-2px);
+        }
+
+        .decrement-btn {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .decrement-btn:hover {
+            background-color: var(--warning-light);
+            transform: translateY(-2px);
+        }
+
+        .reset-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: var(--danger-light);
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--border-color);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .counters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-tally"></i> Multi-Counter Tally</h1>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="addCounterBtn">
+                <i class="fas fa-plus"></i> Add New Counter
+            </button>
+            <button class="btn btn-danger" id="resetAllBtn">
+                <i class="fas fa-trash"></i> Reset All Counters
+            </button>
+        </div>
+
+        <div class="counters-grid" id="countersGrid">
+            <!-- Counters will be added here dynamically -->
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const countersGrid = document.getElementById('countersGrid');
+        const addCounterBtn = document.getElementById('addCounterBtn');
+        const resetAllBtn = document.getElementById('resetAllBtn');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Counter state
+        let counters = [];
+        let counterId = 0;
+
+        // Initialize from cookies if available
+        function initializeFromCookies() {
+            const countersCookie = getCookie('multiCounters');
+            if (countersCookie) {
+                counters = JSON.parse(countersCookie);
+                counterId = counters.length > 0 ? Math.max(...counters.map(c => c.id)) + 1 : 0;
+                renderCounters();
+            } else {
+                // Create a default counter if no cookies exist
+                addCounter();
+            }
+        }
+
+        // Cookie functions
+        function setCookie(name, value, days = 365) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + JSON.stringify(value) + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const cookieName = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookieArray = decodedCookie.split(';');
+            
+            for(let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(cookieName) === 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
+            return "";
+        }
+
+        // Save counters to cookies
+        function saveCounters() {
+            setCookie('multiCounters', counters);
+        }
+
+        // Add a new counter
+        function addCounter() {
+            const newCounter = {
+                id: counterId++,
+                name: `Counter ${counters.length + 1}`,
+                value: 0
+            };
+            
+            counters.push(newCounter);
+            renderCounters();
+            saveCounters();
+        }
+
+        // Remove a counter
+        function removeCounter(id) {
+            counters = counters.filter(counter => counter.id !== id);
+            renderCounters();
+            saveCounters();
+        }
+
+        // Increment counter value
+        function incrementCounter(id) {
+            const counter = counters.find(c => c.id === id);
+            if (counter) {
+                counter.value++;
+                animateCounterValue(id);
+                saveCounters();
+            }
+        }
+
+        // Decrement counter value
+        function decrementCounter(id) {
+            const counter = counters.find(c => c.id === id);
+            if (counter && counter.value > 0) {
+                counter.value--;
+                animateCounterValue(id);
+                saveCounters();
+            }
+        }
+
+        // Reset counter value
+        function resetCounter(id) {
+            const counter = counters.find(c => c.id === id);
+            if (counter) {
+                counter.value = 0;
+                animateCounterValue(id);
+                saveCounters();
+            }
+        }
+
+        // Reset all counters
+        function resetAllCounters() {
+            if (counters.length === 0) return;
+            
+            if (confirm("Are you sure you want to reset all counters?")) {
+                counters.forEach(counter => {
+                    counter.value = 0;
+                });
+                renderCounters();
+                saveCounters();
+            }
+        }
+
+        // Update counter name
+        function updateCounterName(id, newName) {
+            const counter = counters.find(c => c.id === id);
+            if (counter) {
+                counter.name = newName || `Counter ${id + 1}`;
+                saveCounters();
+            }
+        }
+
+        // Animate counter value when changed
+        function animateCounterValue(id) {
+            const valueElement = document.querySelector(`[data-counter-id="${id}"] .counter-value`);
+            if (valueElement) {
+                valueElement.classList.add('animate');
+                setTimeout(() => {
+                    valueElement.classList.remove('animate');
+                    renderCounters();
+                }, 200);
+            }
+        }
+
+        // Render all counters
+        function renderCounters() {
+            if (counters.length === 0) {
+                countersGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-tally"></i>
+                        <h3>No counters yet</h3>
+                        <p>Click "Add New Counter" to create your first counter</p>
+                    </div>
+                `;
+                return;
+            }
+
+            countersGrid.innerHTML = counters.map(counter => `
+                <div class="counter-card" data-counter-id="${counter.id}">
+                    <div class="counter-header">
+                        <input 
+                            type="text" 
+                            class="counter-name" 
+                            value="${counter.name}" 
+                            onchange="updateCounterName(${counter.id}, this.value)"
+                        >
+                        <div class="counter-actions">
+                            <button class="counter-btn" onclick="removeCounter(${counter.id})" title="Delete counter">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="counter-value">${counter.value}</div>
+                    <div class="counter-controls">
+                        <button class="decrement-btn" onclick="decrementCounter(${counter.id})">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button class="reset-btn" onclick="resetCounter(${counter.id})">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                        <button class="increment-btn" onclick="incrementCounter(${counter.id})">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.style.getPropertyValue('--bg-primary') === '#f8fafc';
+            
+            if (isDark) {
+                // Switch to dark mode
+                body.style.setProperty('--bg-primary', '#0f172a');
+                body.style.setProperty('--bg-secondary', '#1e293b');
+                body.style.setProperty('--bg-tertiary', '#334155');
+                body.style.setProperty('--text-primary', '#f8fafc');
+                body.style.setProperty('--text-secondary', '#cbd5e1');
+                body.style.setProperty('--border-color', '#475569');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                // Switch to light mode
+                body.style.setProperty('--bg-primary', '#f8fafc');
+                body.style.setProperty('--bg-secondary', '#e2e8f0');
+                body.style.setProperty('--bg-tertiary', '#cbd5e1');
+                body.style.setProperty('--text-primary', '#0f172a');
+                body.style.setProperty('--text-secondary', '#475569');
+                body.style.setProperty('--border-color', '#cbd5e1');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        }
+
+        // Event listeners
+        addCounterBtn.addEventListener('click', addCounter);
+        resetAllBtn.addEventListener('click', resetAllCounters);
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Initialize the app
+        initializeFromCookies();
+    </script>
+</body>
+</html>
