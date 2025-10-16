@@ -125,50 +125,6 @@
             transform: translateY(-2px);
         }
 
-        .btn-secondary {
-            background-color: var(--secondary);
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--secondary-light);
-            transform: translateY(-2px);
-        }
-
-        .btn.active {
-            background-color: var(--primary);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .view-controls {
-            display: flex;
-            gap: 8px;
-            margin-left: auto;
-        }
-
-        .view-btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            background-color: var(--bg-secondary);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .view-btn:hover {
-            background-color: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .view-btn.active {
-            background-color: var(--primary);
-            color: white;
-        }
-
         /* Grid View */
         .counters-grid {
             display: grid;
@@ -189,15 +145,6 @@
         .counters-grid.five-counters { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
         .counters-grid.six-plus-counters { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 
-        /* List View */
-        .counters-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 100%;
-            max-width: 100%;
-        }
-
         .counter-card {
             background-color: var(--bg-secondary);
             border-radius: 12px;
@@ -212,29 +159,16 @@
             width: 100%;
         }
 
-        .counters-list .counter-card {
-            flex-direction: row;
-            align-items: center;
-            padding: 15px 20px;
-            gap: 15px;
-            min-height: auto;
-        }
-
         .counter-card:hover {
             transform: translateY(-3px);
         }
 
         .counter-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-bottom: 15px;
-        }
-
-        .counters-list .counter-header {
-            margin-bottom: 0;
-            flex: 1;
-            min-width: 0; /* Prevents flex item from overflowing */
+            position: relative;
         }
 
         .counter-name {
@@ -243,29 +177,28 @@
             color: var(--text-primary);
             background: none;
             border: none;
-            width: 70%;
-            padding: 5px;
-            border-radius: 4px;
-            text-overflow: ellipsis;
-            min-width: 0; /* Allows text truncation */
-        }
-
-        .counters-list .counter-name {
-            width: 120px; /* Fixed width for list view */
-            font-size: 1rem;
-            flex-shrink: 0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-align: center;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 200px;
         }
 
         .counter-name:focus {
             outline: 1px solid var(--primary-light);
             background-color: var(--bg-tertiary);
+            transform: scale(1.02);
         }
 
         .counter-actions {
             display: flex;
             gap: 8px;
-            position: relative;
-            flex-shrink: 0;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
         }
 
         .menu-btn {
@@ -282,6 +215,8 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            position: relative;
+            z-index: 25;
         }
 
         .menu-btn:hover {
@@ -298,7 +233,7 @@
             border-radius: 8px;
             padding: 8px;
             box-shadow: var(--shadow);
-            z-index: 10;
+            z-index: 1000;
             min-width: 160px;
             display: none;
         }
@@ -320,6 +255,8 @@
             text-align: left;
             border-radius: 4px;
             transition: background-color 0.3s;
+            position: relative;
+            z-index: 1001;
         }
 
         .dropdown-item:hover {
@@ -346,15 +283,6 @@
             justify-content: center;
         }
 
-        .counters-list .counter-value {
-            margin: 0;
-            font-size: 1.8rem;
-            min-width: 60px;
-            max-width: 80px;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
         /* Dynamic font sizes based on counter count for grid view */
         .counters-grid.one-counter .counter-value { font-size: 4rem; }
         .counters-grid.two-counters .counter-value { font-size: 3.5rem; }
@@ -372,13 +300,8 @@
             display: flex;
             justify-content: space-between;
             gap: 8px;
-        }
-
-        .counters-list .counter-controls {
-            gap: 8px;
-            margin-left: auto;
-            flex-shrink: 0;
-            min-width: 120px;
+            position: relative;
+            z-index: 5;
         }
 
         .counter-controls button {
@@ -391,12 +314,18 @@
             transition: all 0.3s;
             box-shadow: var(--shadow);
             font-size: 1rem;
+            position: relative;
+            z-index: 5;
         }
 
-        .counters-list .counter-controls button {
-            padding: 8px 12px;
-            min-width: 45px;
-            font-size: 0.9rem;
+        .counter-controls button:focus {
+            outline: 2px solid var(--primary-light);
+            outline-offset: 2px;
+        }
+
+        .counter-controls button.active {
+            transform: scale(0.95);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .increment-btn {
@@ -417,6 +346,27 @@
         .decrement-btn:hover {
             background-color: #6366f1;
             transform: translateY(-2px);
+        }
+
+        .keyboard-hint {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .counter-controls button:hover .keyboard-hint {
+            opacity: 1;
         }
 
         .empty-state {
@@ -446,7 +396,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
-            z-index: 100;
+            z-index: 2000;
             align-items: center;
             justify-content: center;
         }
@@ -463,6 +413,7 @@
             max-width: 400px;
             width: 90%;
             text-align: center;
+            z-index: 2001;
         }
 
         .modal h3 {
@@ -541,29 +492,6 @@
             .counters-grid.six-plus-counters { 
                 grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
             }
-            
-            .counters-list .counter-card {
-                flex-direction: column;
-                gap: 12px;
-                text-align: center;
-                padding: 15px;
-            }
-            
-            .counters-list .counter-header {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .counters-list .counter-controls {
-                margin-left: 0;
-                width: 100%;
-                min-width: auto;
-            }
-            
-            .counters-list .counter-name {
-                width: 100%;
-                text-align: center;
-            }
         }
 
         @media (max-width: 768px) {
@@ -591,25 +519,8 @@
                 gap: 10px;
             }
             
-            .view-controls {
-                margin-left: 0;
-                justify-content: center;
-                width: 100%;
-            }
-            
-            .counters-list .counter-card {
-                padding: 12px;
-            }
-            
-            .counters-list .counter-value {
-                font-size: 1.5rem;
-                min-width: 50px;
-            }
-            
-            .counters-list .counter-controls button {
-                padding: 6px 10px;
-                min-width: 40px;
-                font-size: 0.8rem;
+            .counter-name {
+                max-width: 150px;
             }
         }
 
@@ -631,38 +542,12 @@
                 padding: 10px 16px;
             }
             
-            .counters-list .counter-card {
-                padding: 10px;
-            }
-            
-            .counters-list .counter-name {
-                width: 100px;
-                font-size: 0.9rem;
-            }
-            
             .counter-card {
                 padding: 15px;
             }
             
             .counters-grid {
                 grid-template-columns: 1fr !important;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .counters-list .counter-card {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .counters-list .counter-header {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .counters-list .counter-controls {
-                margin-left: 0;
-                width: 100%;
             }
         }
     </style>
@@ -683,14 +568,6 @@
             <button class="btn btn-danger" id="resetAllBtn">
                 <i class="fas fa-trash"></i> Reset All Counters
             </button>
-            <div class="view-controls">
-                <button class="view-btn active" id="gridViewBtn" title="Grid View">
-                    <i class="fas fa-th"></i>
-                </button>
-                <button class="view-btn" id="listViewBtn" title="List View">
-                    <i class="fas fa-list"></i>
-                </button>
-            </div>
         </div>
 
         <div class="counters-grid" id="countersContainer">
@@ -716,8 +593,6 @@
         const addCounterBtn = document.getElementById('addCounterBtn');
         const resetAllBtn = document.getElementById('resetAllBtn');
         const themeToggle = document.getElementById('themeToggle');
-        const gridViewBtn = document.getElementById('gridViewBtn');
-        const listViewBtn = document.getElementById('listViewBtn');
         const setValueModal = document.getElementById('setValueModal');
         const setValueInput = document.getElementById('setValueInput');
         const cancelSetValue = document.getElementById('cancelSetValue');
@@ -728,12 +603,11 @@
         let counterId = 0;
         let activeMenu = null;
         let currentCounterId = null;
-        let currentView = 'grid'; // 'grid' or 'list'
+        let lastUsedButton = null;
 
         // Initialize from cookies if available
         function initializeFromCookies() {
             const countersCookie = getCookie('multiCounters');
-            const viewCookie = getCookie('multiCountersView');
             
             if (countersCookie) {
                 counters = JSON.parse(countersCookie);
@@ -741,11 +615,6 @@
             } else {
                 // Create a default counter if no cookies exist
                 addCounter();
-            }
-            
-            if (viewCookie) {
-                currentView = viewCookie;
-                updateViewButtons();
             }
             
             renderCounters();
@@ -779,37 +648,10 @@
         // Save counters to cookies
         function saveCounters() {
             setCookie('multiCounters', counters);
-            setCookie('multiCountersView', currentView);
         }
 
-        // Update view buttons state
-        function updateViewButtons() {
-            gridViewBtn.classList.toggle('active', currentView === 'grid');
-            listViewBtn.classList.toggle('active', currentView === 'list');
-        }
-
-        // Switch to grid view
-        function switchToGridView() {
-            currentView = 'grid';
-            countersContainer.className = 'counters-grid';
-            updateViewButtons();
-            renderCounters();
-            saveCounters();
-        }
-
-        // Switch to list view
-        function switchToListView() {
-            currentView = 'list';
-            countersContainer.className = 'counters-list';
-            updateViewButtons();
-            renderCounters();
-            saveCounters();
-        }
-
-        // Update grid layout based on number of counters (for grid view only)
+        // Update grid layout based on number of counters
         function updateGridLayout() {
-            if (currentView !== 'grid') return;
-            
             const count = counters.length;
             
             // Remove all layout classes
@@ -916,27 +758,77 @@
                 counter.value = 0;
                 animateCounterValue(id);
                 saveCounters();
+                renderCounters();
                 closeAllMenus();
             }
         }
 
         // Increment counter value
-        function incrementCounter(id) {
+        function incrementCounter(id, event) {
+            if (event) {
+                event.stopPropagation();
+                lastUsedButton = { type: 'increment', id: id };
+            }
+            
             const counter = counters.find(c => c.id === id);
             if (counter) {
                 counter.value++;
                 animateCounterValue(id);
                 saveCounters();
+                renderCounters();
             }
         }
 
         // Decrement counter value
-        function decrementCounter(id) {
+        function decrementCounter(id, event) {
+            if (event) {
+                event.stopPropagation();
+                lastUsedButton = { type: 'decrement', id: id };
+            }
+            
             const counter = counters.find(c => c.id === id);
             if (counter && counter.value > 0) {
                 counter.value--;
                 animateCounterValue(id);
                 saveCounters();
+                renderCounters();
+            }
+        }
+
+        // Handle keyboard input for last used button
+        function handleKeyboardInput(event) {
+            if (!lastUsedButton) return;
+            
+            const key = event.key;
+            
+            // Only process number keys and some special keys
+            if (/^[0-9]$/.test(key)) {
+                // Pressing number keys multiple times
+                const counter = counters.find(c => c.id === lastUsedButton.id);
+                if (counter) {
+                    const incrementValue = parseInt(key);
+                    if (lastUsedButton.type === 'increment') {
+                        counter.value += incrementValue;
+                    } else if (lastUsedButton.type === 'decrement' && counter.value >= incrementValue) {
+                        counter.value -= incrementValue;
+                    }
+                    animateCounterValue(lastUsedButton.id);
+                    saveCounters();
+                    renderCounters();
+                }
+            } else if (key === 'Enter' || key === ' ') {
+                // Enter or Space to trigger the last action once
+                if (lastUsedButton.type === 'increment') {
+                    incrementCounter(lastUsedButton.id);
+                } else if (lastUsedButton.type === 'decrement') {
+                    decrementCounter(lastUsedButton.id);
+                }
+            } else if (key === 'Escape') {
+                // Escape to clear last used button
+                lastUsedButton = null;
+                document.querySelectorAll('.counter-controls button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
             }
         }
 
@@ -969,16 +861,13 @@
                 valueElement.classList.add('animate');
                 setTimeout(() => {
                     valueElement.classList.remove('animate');
-                    renderCounters();
                 }, 200);
             }
         }
 
-        // Render all counters based on current view
+        // Render all counters
         function renderCounters() {
-            if (currentView === 'grid') {
-                updateGridLayout();
-            }
+            updateGridLayout();
             
             if (counters.length === 0) {
                 countersContainer.innerHTML = `
@@ -1019,11 +908,13 @@
                     </div>
                     <div class="counter-value">${counter.value}</div>
                     <div class="counter-controls">
-                        <button class="decrement-btn" onclick="decrementCounter(${counter.id})">
+                        <button class="decrement-btn" onclick="decrementCounter(${counter.id}, event)">
                             <i class="fas fa-minus"></i>
+                            <span class="keyboard-hint">Press any number key</span>
                         </button>
-                        <button class="increment-btn" onclick="incrementCounter(${counter.id})">
+                        <button class="increment-btn" onclick="incrementCounter(${counter.id}, event)">
                             <i class="fas fa-plus"></i>
+                            <span class="keyboard-hint">Press any number key</span>
                         </button>
                     </div>
                 </div>
@@ -1060,13 +951,14 @@
         addCounterBtn.addEventListener('click', addCounter);
         resetAllBtn.addEventListener('click', resetAllCounters);
         themeToggle.addEventListener('click', toggleTheme);
-        gridViewBtn.addEventListener('click', switchToGridView);
-        listViewBtn.addEventListener('click', switchToListView);
         confirmSetValue.addEventListener('click', setCounterValue);
         cancelSetValue.addEventListener('click', () => {
             setValueModal.classList.remove('show');
             currentCounterId = null;
         });
+
+        // Keyboard event listener
+        document.addEventListener('keydown', handleKeyboardInput);
 
         // Close modal when clicking outside
         setValueModal.addEventListener('click', (e) => {
