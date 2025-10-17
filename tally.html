@@ -16,8 +16,6 @@
             --danger-light: #64748b;
             --warning: #475569;
             --warning-light: #64748b;
-            --success: #10b981;
-            --success-light: #34d399;
             --bg-primary: #0f172a;
             --bg-secondary: #1e293b;
             --bg-tertiary: #334155;
@@ -127,16 +125,6 @@
             transform: translateY(-2px);
         }
 
-        .btn-success {
-            background-color: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: var(--success-light);
-            transform: translateY(-2px);
-        }
-
         /* Grid View */
         .counters-grid {
             display: grid;
@@ -173,11 +161,6 @@
 
         .counter-card:hover {
             transform: translateY(-3px);
-        }
-
-        .counter-card.goal-completed {
-            border-color: var(--success);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
         .counter-header {
@@ -251,7 +234,7 @@
             padding: 8px;
             box-shadow: var(--shadow);
             z-index: 1000;
-            min-width: 180px;
+            min-width: 160px;
             display: none;
         }
 
@@ -306,42 +289,6 @@
             color: var(--secondary-light);
         }
 
-        .counter-value.goal-completed {
-            color: var(--success);
-        }
-
-        /* Goal Progress */
-        .goal-progress {
-            margin: 10px 0;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background-color: var(--bg-tertiary);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--success));
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-
-        .goal-text {
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-top: 5px;
-        }
-
-        .goal-text .goal-reached {
-            color: var(--success);
-            font-weight: 600;
-        }
-
         .counter-controls {
             display: flex;
             justify-content: space-between;
@@ -372,6 +319,7 @@
         .counter-controls button.active {
             transform: scale(0.95);
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            background-color: var(--primary-light);
         }
 
         .increment-btn {
@@ -433,8 +381,8 @@
             margin-bottom: 10px;
         }
 
-        /* Total Goal Section */
-        .total-goal-section {
+        /* Total Count Bar */
+        .total-count-bar {
             background: var(--bg-secondary);
             border-radius: 12px;
             padding: 20px;
@@ -443,43 +391,75 @@
             box-shadow: var(--shadow);
         }
 
-        .total-goal-header {
+        .total-count-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
 
-        .total-goal-title {
+        .total-count-title {
             font-size: 1.2rem;
             font-weight: 600;
             color: var(--text-primary);
         }
 
-        .total-goal-value {
-            font-size: 1.1rem;
+        .total-count-value {
+            font-size: 1.5rem;
+            color: var(--primary-light);
+            font-weight: 700;
+        }
+
+        .counters-breakdown {
+            margin-top: 15px;
+        }
+
+        .counter-breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .counter-breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .counter-breakdown-name {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .counter-breakdown-value {
             color: var(--primary-light);
             font-weight: 600;
         }
 
-        .total-goal-progress {
-            margin-top: 10px;
-        }
-
-        .total-goal-progress .progress-bar {
-            height: 8px;
-        }
-
-        .total-goal-text {
-            text-align: center;
-            font-size: 0.9rem;
+        /* Keyboard Status Indicator */
+        .keyboard-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            margin-top: 8px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            z-index: 100;
         }
 
-        .total-goal-text .goal-reached {
+        .keyboard-status.active {
             color: var(--success);
-            font-weight: 600;
+            border-color: var(--success);
+        }
+
+        .keyboard-status.inactive {
+            color: var(--text-secondary);
+            border-color: var(--border-color);
         }
 
         /* Modal styles */
@@ -618,10 +598,17 @@
                 max-width: 150px;
             }
 
-            .total-goal-header {
+            .total-count-header {
                 flex-direction: column;
                 gap: 10px;
                 text-align: center;
+            }
+
+            .keyboard-status {
+                bottom: 10px;
+                right: 10px;
+                font-size: 0.7rem;
+                padding: 6px 10px;
             }
         }
 
@@ -669,28 +656,27 @@
             <button class="btn btn-danger" id="resetAllBtn">
                 <i class="fas fa-trash"></i> Reset All Counters
             </button>
-            <button class="btn btn-success" id="setTotalGoalBtn">
-                <i class="fas fa-bullseye"></i> Set Total Goal
-            </button>
         </div>
 
-        <!-- Total Goal Section -->
-        <div class="total-goal-section" id="totalGoalSection" style="display: none;">
-            <div class="total-goal-header">
-                <div class="total-goal-title">Total Goal Progress</div>
-                <div class="total-goal-value" id="totalGoalValue">0/0</div>
+        <!-- Total Count Bar -->
+        <div class="total-count-bar" id="totalCountBar">
+            <div class="total-count-header">
+                <div class="total-count-title">Total Count</div>
+                <div class="total-count-value" id="totalCountValue">0</div>
             </div>
-            <div class="total-goal-progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="totalProgressFill" style="width: 0%"></div>
-                </div>
-                <div class="total-goal-text" id="totalGoalText">No total goal set</div>
+            <div class="counters-breakdown" id="countersBreakdown">
+                <!-- Counter breakdown will be added here dynamically -->
             </div>
         </div>
 
         <div class="counters-grid" id="countersContainer">
             <!-- Counters will be added here dynamically -->
         </div>
+    </div>
+
+    <!-- Keyboard Status Indicator -->
+    <div class="keyboard-status inactive" id="keyboardStatus">
+        Keyboard: Inactive
     </div>
 
     <!-- Set Value Modal -->
@@ -705,54 +691,20 @@
         </div>
     </div>
 
-    <!-- Set Goal Modal -->
-    <div class="modal" id="setGoalModal">
-        <div class="modal-content">
-            <h3>Set Counter Goal</h3>
-            <input type="number" class="modal-input" id="setGoalInput" placeholder="Enter goal value" min="1">
-            <div class="modal-buttons">
-                <button class="modal-btn cancel" id="cancelSetGoal">Cancel</button>
-                <button class="modal-btn confirm" id="confirmSetGoal">Set Goal</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Set Total Goal Modal -->
-    <div class="modal" id="setTotalGoalModal">
-        <div class="modal-content">
-            <h3>Set Total Goal</h3>
-            <p style="margin-bottom: 15px; color: var(--text-secondary);">Set a goal for the sum of all counter values</p>
-            <input type="number" class="modal-input" id="setTotalGoalInput" placeholder="Enter total goal value" min="1">
-            <div class="modal-buttons">
-                <button class="modal-btn cancel" id="cancelSetTotalGoal">Cancel</button>
-                <button class="modal-btn confirm" id="confirmSetTotalGoal">Set Total Goal</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // DOM Elements
         const countersContainer = document.getElementById('countersContainer');
         const addCounterBtn = document.getElementById('addCounterBtn');
         const resetAllBtn = document.getElementById('resetAllBtn');
-        const setTotalGoalBtn = document.getElementById('setTotalGoalBtn');
         const themeToggle = document.getElementById('themeToggle');
         const setValueModal = document.getElementById('setValueModal');
         const setValueInput = document.getElementById('setValueInput');
         const cancelSetValue = document.getElementById('cancelSetValue');
         const confirmSetValue = document.getElementById('confirmSetValue');
-        const setGoalModal = document.getElementById('setGoalModal');
-        const setGoalInput = document.getElementById('setGoalInput');
-        const cancelSetGoal = document.getElementById('cancelSetGoal');
-        const confirmSetGoal = document.getElementById('confirmSetGoal');
-        const setTotalGoalModal = document.getElementById('setTotalGoalModal');
-        const setTotalGoalInput = document.getElementById('setTotalGoalInput');
-        const cancelSetTotalGoal = document.getElementById('cancelSetTotalGoal');
-        const confirmSetTotalGoal = document.getElementById('confirmSetTotalGoal');
-        const totalGoalSection = document.getElementById('totalGoalSection');
-        const totalGoalValue = document.getElementById('totalGoalValue');
-        const totalProgressFill = document.getElementById('totalProgressFill');
-        const totalGoalText = document.getElementById('totalGoalText');
+        const totalCountBar = document.getElementById('totalCountBar');
+        const totalCountValue = document.getElementById('totalCountValue');
+        const countersBreakdown = document.getElementById('countersBreakdown');
+        const keyboardStatus = document.getElementById('keyboardStatus');
 
         // Counter state
         let counters = [];
@@ -760,23 +712,22 @@
         let activeMenu = null;
         let currentCounterId = null;
         let lastUsedButton = null;
-        let totalGoal = null; // Total goal for sum of all counters
+        let keyboardTimeout = null;
+        let isKeyboardActive = false;
 
         // Initialize from cookies if available
         function initializeFromCookies() {
             const countersCookie = getCookie('multiCounters');
             
             if (countersCookie) {
-                const data = JSON.parse(countersCookie);
-                counters = data.counters || [];
-                totalGoal = data.totalGoal || null;
+                counters = JSON.parse(countersCookie);
                 counterId = counters.length > 0 ? Math.max(...counters.map(c => c.id)) + 1 : 0;
             } else {
                 // Create a default counter if no cookies exist
                 addCounter();
             }
             
-            updateTotalGoalDisplay();
+            updateTotalCountDisplay();
             renderCounters();
         }
 
@@ -807,11 +758,7 @@
 
         // Save counters to cookies
         function saveCounters() {
-            const data = {
-                counters: counters,
-                totalGoal: totalGoal
-            };
-            setCookie('multiCounters', data);
+            setCookie('multiCounters', counters);
         }
 
         // Calculate total of all counter values
@@ -819,58 +766,55 @@
             return counters.reduce((sum, counter) => sum + counter.value, 0);
         }
 
-        // Calculate total progress percentage
-        function calculateTotalProgress() {
-            if (!totalGoal) return 0;
+        // Update total count display
+        function updateTotalCountDisplay() {
             const total = calculateTotal();
-            return Math.min((total / totalGoal) * 100, 100);
-        }
-
-        // Check if total goal is reached
-        function isTotalGoalReached() {
-            if (!totalGoal) return false;
-            return calculateTotal() >= totalGoal;
-        }
-
-        // Update total goal display
-        function updateTotalGoalDisplay() {
-            if (totalGoal) {
-                totalGoalSection.style.display = 'block';
-                const total = calculateTotal();
-                const progress = calculateTotalProgress();
-                const isReached = isTotalGoalReached();
-                
-                totalGoalValue.textContent = `${total}/${totalGoal}`;
-                totalProgressFill.style.width = `${progress}%`;
-                
-                if (isReached) {
-                    totalGoalText.innerHTML = `<span class="goal-reached">Total goal reached! (${total}/${totalGoal})</span>`;
-                    totalGoalSection.style.borderColor = 'var(--success)';
-                } else {
-                    totalGoalText.textContent = `${total}/${totalGoal}`;
-                    totalGoalSection.style.borderColor = 'var(--border-color)';
-                }
+            totalCountValue.textContent = total;
+            
+            // Update counters breakdown
+            if (counters.length > 0) {
+                countersBreakdown.innerHTML = counters.map(counter => `
+                    <div class="counter-breakdown-item">
+                        <span class="counter-breakdown-name">${counter.name}</span>
+                        <span class="counter-breakdown-value">${counter.value}</span>
+                    </div>
+                `).join('');
             } else {
-                totalGoalSection.style.display = 'none';
+                countersBreakdown.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 10px;">No counters yet</div>';
             }
         }
 
-        // Show set total goal modal
-        function showSetTotalGoalModal() {
-            setTotalGoalInput.value = totalGoal || '';
-            setTotalGoalModal.classList.add('show');
-            setTotalGoalInput.focus();
+        // Activate keyboard input
+        function activateKeyboard() {
+            isKeyboardActive = true;
+            keyboardStatus.textContent = 'Keyboard: Active';
+            keyboardStatus.classList.remove('inactive');
+            keyboardStatus.classList.add('active');
+            
+            // Clear existing timeout
+            if (keyboardTimeout) {
+                clearTimeout(keyboardTimeout);
+            }
+            
+            // Set timeout to deactivate keyboard after 500ms
+            keyboardTimeout = setTimeout(() => {
+                deactivateKeyboard();
+            }, 500);
         }
 
-        // Set total goal
-        function setTotalGoal() {
-            const goal = parseInt(setTotalGoalInput.value);
-            if (!isNaN(goal) && goal >= 1) {
-                totalGoal = goal;
-                updateTotalGoalDisplay();
-                saveCounters();
-            }
-            setTotalGoalModal.classList.remove('show');
+        // Deactivate keyboard input
+        function deactivateKeyboard() {
+            isKeyboardActive = false;
+            keyboardStatus.textContent = 'Keyboard: Inactive';
+            keyboardStatus.classList.remove('active');
+            keyboardStatus.classList.add('inactive');
+            
+            // Remove active state from buttons
+            document.querySelectorAll('.counter-controls button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            lastUsedButton = null;
         }
 
         // Update grid layout based on number of counters
@@ -935,18 +879,6 @@
             }
         }
 
-        // Show set goal modal
-        function showSetGoalModal(counterId) {
-            currentCounterId = counterId;
-            const counter = counters.find(c => c.id === counterId);
-            if (counter) {
-                setGoalInput.value = counter.goal || '';
-                setGoalModal.classList.add('show');
-                setGoalInput.focus();
-                closeAllMenus();
-            }
-        }
-
         // Set counter value from modal
         function setCounterValue() {
             if (currentCounterId === null) return;
@@ -956,10 +888,9 @@
                 const counter = counters.find(c => c.id === currentCounterId);
                 if (counter) {
                     counter.value = value;
-                    checkGoalCompletion(counter);
                     animateCounterValue(currentCounterId);
                     saveCounters();
-                    updateTotalGoalDisplay();
+                    updateTotalCountDisplay();
                     renderCounters();
                 }
             }
@@ -967,51 +898,16 @@
             currentCounterId = null;
         }
 
-        // Set counter goal from modal
-        function setCounterGoal() {
-            if (currentCounterId === null) return;
-            
-            const goal = parseInt(setGoalInput.value);
-            if (!isNaN(goal) && goal >= 1) {
-                const counter = counters.find(c => c.id === currentCounterId);
-                if (counter) {
-                    counter.goal = goal;
-                    checkGoalCompletion(counter);
-                    saveCounters();
-                    renderCounters();
-                }
-            }
-            setGoalModal.classList.remove('show');
-            currentCounterId = null;
-        }
-
-        // Check if counter has reached its goal
-        function checkGoalCompletion(counter) {
-            if (counter.goal && counter.value >= counter.goal) {
-                counter.goalCompleted = true;
-            } else {
-                counter.goalCompleted = false;
-            }
-        }
-
-        // Calculate progress percentage
-        function calculateProgress(counter) {
-            if (!counter.goal) return 0;
-            return Math.min((counter.value / counter.goal) * 100, 100);
-        }
-
         // Add a new counter
         function addCounter() {
             const newCounter = {
                 id: counterId++,
                 name: `Counter ${counters.length + 1}`,
-                value: 0,
-                goal: null,
-                goalCompleted: false
+                value: 0
             };
             
             counters.push(newCounter);
-            updateTotalGoalDisplay();
+            updateTotalCountDisplay();
             renderCounters();
             saveCounters();
         }
@@ -1019,7 +915,7 @@
         // Remove a counter
         function removeCounter(id) {
             counters = counters.filter(counter => counter.id !== id);
-            updateTotalGoalDisplay();
+            updateTotalCountDisplay();
             renderCounters();
             saveCounters();
             closeAllMenus();
@@ -1030,22 +926,9 @@
             const counter = counters.find(c => c.id === id);
             if (counter) {
                 counter.value = 0;
-                counter.goalCompleted = false;
                 animateCounterValue(id);
                 saveCounters();
-                updateTotalGoalDisplay();
-                renderCounters();
-                closeAllMenus();
-            }
-        }
-
-        // Remove goal from counter
-        function removeGoal(id) {
-            const counter = counters.find(c => c.id === id);
-            if (counter) {
-                counter.goal = null;
-                counter.goalCompleted = false;
-                saveCounters();
+                updateTotalCountDisplay();
                 renderCounters();
                 closeAllMenus();
             }
@@ -1056,15 +939,15 @@
             if (event) {
                 event.stopPropagation();
                 lastUsedButton = { type: 'increment', id: id };
+                activateKeyboard();
             }
             
             const counter = counters.find(c => c.id === id);
             if (counter) {
                 counter.value++;
-                checkGoalCompletion(counter);
                 animateCounterValue(id);
                 saveCounters();
-                updateTotalGoalDisplay();
+                updateTotalCountDisplay();
                 renderCounters();
             }
         }
@@ -1074,22 +957,22 @@
             if (event) {
                 event.stopPropagation();
                 lastUsedButton = { type: 'decrement', id: id };
+                activateKeyboard();
             }
             
             const counter = counters.find(c => c.id === id);
             if (counter && counter.value > 0) {
                 counter.value--;
-                checkGoalCompletion(counter);
                 animateCounterValue(id);
                 saveCounters();
-                updateTotalGoalDisplay();
+                updateTotalCountDisplay();
                 renderCounters();
             }
         }
 
         // Handle keyboard input for last used button
         function handleKeyboardInput(event) {
-            if (!lastUsedButton) return;
+            if (!isKeyboardActive || !lastUsedButton) return;
             
             const key = event.key;
             
@@ -1104,12 +987,12 @@
                     } else if (lastUsedButton.type === 'decrement' && counter.value >= incrementValue) {
                         counter.value -= incrementValue;
                     }
-                    checkGoalCompletion(counter);
                     animateCounterValue(lastUsedButton.id);
                     saveCounters();
-                    updateTotalGoalDisplay();
+                    updateTotalCountDisplay();
                     renderCounters();
                 }
+                activateKeyboard(); // Reset timer
             } else if (key === 'Enter' || key === ' ') {
                 // Enter or Space to trigger the last action once
                 if (lastUsedButton.type === 'increment') {
@@ -1117,12 +1000,10 @@
                 } else if (lastUsedButton.type === 'decrement') {
                     decrementCounter(lastUsedButton.id);
                 }
+                activateKeyboard(); // Reset timer
             } else if (key === 'Escape') {
                 // Escape to clear last used button
-                lastUsedButton = null;
-                document.querySelectorAll('.counter-controls button').forEach(btn => {
-                    btn.classList.remove('active');
-                });
+                deactivateKeyboard();
             }
         }
 
@@ -1133,9 +1014,8 @@
             if (confirm("Are you sure you want to reset all counters?")) {
                 counters.forEach(counter => {
                     counter.value = 0;
-                    counter.goalCompleted = false;
                 });
-                updateTotalGoalDisplay();
+                updateTotalCountDisplay();
                 renderCounters();
                 saveCounters();
             }
@@ -1147,6 +1027,7 @@
             if (counter) {
                 counter.name = newName || `Counter ${id + 1}`;
                 saveCounters();
+                updateTotalCountDisplay();
             }
         }
 
@@ -1176,16 +1057,8 @@
                 return;
             }
 
-            countersContainer.innerHTML = counters.map(counter => {
-                const progress = calculateProgress(counter);
-                const goalText = counter.goal ? 
-                    (counter.goalCompleted ? 
-                        `<span class="goal-reached">Goal reached! (${counter.value}/${counter.goal})</span>` : 
-                        `${counter.value}/${counter.goal}`) : 
-                    'No goal set';
-                
-                return `
-                <div class="counter-card ${counter.goalCompleted ? 'goal-completed' : ''}" data-counter-id="${counter.id}">
+            countersContainer.innerHTML = counters.map(counter => `
+                <div class="counter-card" data-counter-id="${counter.id}">
                     <div class="counter-header">
                         <input 
                             type="text" 
@@ -1201,14 +1074,6 @@
                                 <button class="dropdown-item" onclick="showSetValueModal(${counter.id})">
                                     <i class="fas fa-edit"></i> Set Value
                                 </button>
-                                <button class="dropdown-item" onclick="showSetGoalModal(${counter.id})">
-                                    <i class="fas fa-bullseye"></i> ${counter.goal ? 'Change Goal' : 'Set Goal'}
-                                </button>
-                                ${counter.goal ? `
-                                <button class="dropdown-item" onclick="removeGoal(${counter.id})">
-                                    <i class="fas fa-times"></i> Remove Goal
-                                </button>
-                                ` : ''}
                                 <button class="dropdown-item" onclick="resetCounterValue(${counter.id})">
                                     <i class="fas fa-redo"></i> Reset Counter
                                 </button>
@@ -1218,15 +1083,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="counter-value ${counter.goalCompleted ? 'goal-completed' : ''}">${counter.value}</div>
-                    ${counter.goal ? `
-                    <div class="goal-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${progress}%"></div>
-                        </div>
-                        <div class="goal-text">${goalText}</div>
-                    </div>
-                    ` : ''}
+                    <div class="counter-value">${counter.value}</div>
                     <div class="counter-controls">
                         <button class="decrement-btn" onclick="decrementCounter(${counter.id}, event)">
                             <i class="fas fa-minus"></i>
@@ -1238,8 +1095,7 @@
                         </button>
                     </div>
                 </div>
-                `;
-            }).join('');
+            `).join('');
         }
 
         // Theme toggle functionality
@@ -1271,27 +1127,17 @@
         // Event listeners
         addCounterBtn.addEventListener('click', addCounter);
         resetAllBtn.addEventListener('click', resetAllCounters);
-        setTotalGoalBtn.addEventListener('click', showSetTotalGoalModal);
         themeToggle.addEventListener('click', toggleTheme);
         confirmSetValue.addEventListener('click', setCounterValue);
         cancelSetValue.addEventListener('click', () => {
             setValueModal.classList.remove('show');
             currentCounterId = null;
         });
-        confirmSetGoal.addEventListener('click', setCounterGoal);
-        cancelSetGoal.addEventListener('click', () => {
-            setGoalModal.classList.remove('show');
-            currentCounterId = null;
-        });
-        confirmSetTotalGoal.addEventListener('click', setTotalGoal);
-        cancelSetTotalGoal.addEventListener('click', () => {
-            setTotalGoalModal.classList.remove('show');
-        });
 
         // Keyboard event listener
         document.addEventListener('keydown', handleKeyboardInput);
 
-        // Close modals when clicking outside
+        // Close modal when clicking outside
         setValueModal.addEventListener('click', (e) => {
             if (e.target === setValueModal) {
                 setValueModal.classList.remove('show');
@@ -1299,38 +1145,13 @@
             }
         });
 
-        setGoalModal.addEventListener('click', (e) => {
-            if (e.target === setGoalModal) {
-                setGoalModal.classList.remove('show');
-                currentCounterId = null;
-            }
-        });
-
-        setTotalGoalModal.addEventListener('click', (e) => {
-            if (e.target === setTotalGoalModal) {
-                setTotalGoalModal.classList.remove('show');
-            }
-        });
-
         // Close dropdowns when clicking outside
         document.addEventListener('click', closeAllMenus);
 
-        // Handle Enter key in modal inputs
+        // Handle Enter key in modal input
         setValueInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 setCounterValue();
-            }
-        });
-
-        setGoalInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                setCounterGoal();
-            }
-        });
-
-        setTotalGoalInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                setTotalGoal();
             }
         });
 
