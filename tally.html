@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi-Counter Tally</title>
+    <link rel="icon" type="image/png" href="tally.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -125,25 +126,19 @@
             transform: translateY(-2px);
         }
 
-        /* Grid View */
         .counters-grid {
             display: grid;
             gap: 20px;
             transition: all 0.3s ease;
             width: 100%;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
         }
 
-        /* Grid layouts for different counter counts - RESPONSIVE */
         .counters-grid.one-counter { 
             grid-template-columns: 1fr; 
             max-width: 400px;
             margin: 0 auto;
         }
-        .counters-grid.two-counters { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-        .counters-grid.three-counters { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-        .counters-grid.four-counters { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-        .counters-grid.five-counters { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-        .counters-grid.six-plus-counters { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 
         .counter-card {
             background-color: var(--bg-secondary);
@@ -353,8 +348,7 @@
             border-radius: 4px;
             font-size: 0.75rem;
             white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s;
+            display: none; 
             pointer-events: none;
             z-index: 10;
         }
@@ -395,7 +389,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
         }
 
         .total-count-title {
@@ -405,61 +398,13 @@
         }
 
         .total-count-value {
-            font-size: 1.5rem;
+            font-size: 3rem; 
             color: var(--primary-light);
             font-weight: 700;
         }
 
         .counters-breakdown {
-            margin-top: 15px;
-        }
-
-        .counter-breakdown-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .counter-breakdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .counter-breakdown-name {
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .counter-breakdown-value {
-            color: var(--primary-light);
-            font-weight: 600;
-        }
-
-        /* Keyboard Status Indicator */
-        .keyboard-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            box-shadow: var(--shadow);
-            transition: all 0.3s;
-            z-index: 100;
-        }
-
-        .keyboard-status.active {
-            color: var(--success);
-            border-color: var(--success);
-        }
-
-        .keyboard-status.inactive {
-            color: var(--text-secondary);
-            border-color: var(--border-color);
+            margin-top: 0;
         }
 
         /* Modal styles */
@@ -546,32 +491,9 @@
             background-color: var(--danger-light);
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 1200px) {
-            .container {
-                max-width: 100%;
-                padding: 0 15px;
-            }
-            
-            .counters-grid.four-counters,
-            .counters-grid.five-counters,
-            .counters-grid.six-plus-counters { 
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            }
-        }
-
-        @media (max-width: 900px) {
-            .counters-grid.three-counters,
-            .counters-grid.four-counters,
-            .counters-grid.five-counters,
-            .counters-grid.six-plus-counters { 
-                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
-            }
-        }
-
         @media (max-width: 768px) {
             .counters-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
                 gap: 15px;
             }
             
@@ -602,13 +524,6 @@
                 flex-direction: column;
                 gap: 10px;
                 text-align: center;
-            }
-
-            .keyboard-status {
-                bottom: 10px;
-                right: 10px;
-                font-size: 0.7rem;
-                padding: 6px 10px;
             }
         }
 
@@ -654,32 +569,26 @@
                 <i class="fas fa-plus"></i> Add New Counter
             </button>
             <button class="btn btn-danger" id="resetAllBtn">
-                <i class="fas fa-trash"></i> Reset All Counters
+                <i class="fas fa-redo"></i> Reset All Counters
+            </button>
+            <button class="btn btn-danger" id="deleteAllBtn">
+                <i class="fas fa-trash"></i> Delete All Counters
             </button>
         </div>
 
-        <!-- Total Count Bar -->
         <div class="total-count-bar" id="totalCountBar">
             <div class="total-count-header">
                 <div class="total-count-title">Total Count</div>
                 <div class="total-count-value" id="totalCountValue">0</div>
             </div>
             <div class="counters-breakdown" id="countersBreakdown">
-                <!-- Counter breakdown will be added here dynamically -->
-            </div>
+                </div>
         </div>
 
         <div class="counters-grid" id="countersContainer">
-            <!-- Counters will be added here dynamically -->
-        </div>
+            </div>
     </div>
 
-    <!-- Keyboard Status Indicator -->
-    <div class="keyboard-status inactive" id="keyboardStatus">
-        Keyboard: Inactive
-    </div>
-
-    <!-- Set Value Modal -->
     <div class="modal" id="setValueModal">
         <div class="modal-content">
             <h3>Set Counter Value</h3>
@@ -696,42 +605,22 @@
         const countersContainer = document.getElementById('countersContainer');
         const addCounterBtn = document.getElementById('addCounterBtn');
         const resetAllBtn = document.getElementById('resetAllBtn');
+        const deleteAllBtn = document.getElementById('deleteAllBtn');
         const themeToggle = document.getElementById('themeToggle');
         const setValueModal = document.getElementById('setValueModal');
         const setValueInput = document.getElementById('setValueInput');
         const cancelSetValue = document.getElementById('cancelSetValue');
         const confirmSetValue = document.getElementById('confirmSetValue');
-        const totalCountBar = document.getElementById('totalCountBar');
         const totalCountValue = document.getElementById('totalCountValue');
         const countersBreakdown = document.getElementById('countersBreakdown');
-        const keyboardStatus = document.getElementById('keyboardStatus');
 
         // Counter state
         let counters = [];
         let counterId = 0;
         let activeMenu = null;
         let currentCounterId = null;
-        let lastUsedButton = null;
-        let keyboardTimeout = null;
-        let isKeyboardActive = false;
 
-        // Initialize from cookies if available
-        function initializeFromCookies() {
-            const countersCookie = getCookie('multiCounters');
-            
-            if (countersCookie) {
-                counters = JSON.parse(countersCookie);
-                counterId = counters.length > 0 ? Math.max(...counters.map(c => c.id)) + 1 : 0;
-            } else {
-                // Create a default counter if no cookies exist
-                addCounter();
-            }
-            
-            updateTotalCountDisplay();
-            renderCounters();
-        }
-
-        // Cookie functions
+        // Cookies
         function setCookie(name, value, days = 365) {
             const date = new Date();
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -756,95 +645,33 @@
             return "";
         }
 
-        // Save counters to cookies
         function saveCounters() {
             setCookie('multiCounters', counters);
         }
 
-        // Calculate total of all counter values
         function calculateTotal() {
             return counters.reduce((sum, counter) => sum + counter.value, 0);
         }
 
-        // Update total count display
         function updateTotalCountDisplay() {
             const total = calculateTotal();
             totalCountValue.textContent = total;
-            
-            // Update counters breakdown
-            if (counters.length > 0) {
-                countersBreakdown.innerHTML = counters.map(counter => `
-                    <div class="counter-breakdown-item">
-                        <span class="counter-breakdown-name">${counter.name}</span>
-                        <span class="counter-breakdown-value">${counter.value}</span>
-                    </div>
-                `).join('');
-            } else {
-                countersBreakdown.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 10px;">No counters yet</div>';
-            }
+            countersBreakdown.innerHTML = '';
         }
 
-        // Activate keyboard input
-        function activateKeyboard() {
-            isKeyboardActive = true;
-            keyboardStatus.textContent = 'Keyboard: Active';
-            keyboardStatus.classList.remove('inactive');
-            keyboardStatus.classList.add('active');
-            
-            // Clear existing timeout
-            if (keyboardTimeout) {
-                clearTimeout(keyboardTimeout);
-            }
-            
-            // Set timeout to deactivate keyboard after 500ms
-            keyboardTimeout = setTimeout(() => {
-                deactivateKeyboard();
-            }, 500);
-        }
-
-        // Deactivate keyboard input
-        function deactivateKeyboard() {
-            isKeyboardActive = false;
-            keyboardStatus.textContent = 'Keyboard: Inactive';
-            keyboardStatus.classList.remove('active');
-            keyboardStatus.classList.add('inactive');
-            
-            // Remove active state from buttons
-            document.querySelectorAll('.counter-controls button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            lastUsedButton = null;
-        }
-
-        // Update grid layout based on number of counters
         function updateGridLayout() {
             const count = counters.length;
             
-            // Remove all layout classes
-            countersContainer.classList.remove('one-counter', 'two-counters', 'three-counters', 'four-counters', 'five-counters', 'six-plus-counters');
+            countersContainer.classList.remove('one-counter');
             
-            // Add the appropriate layout class
             if (count === 1) {
                 countersContainer.classList.add('one-counter');
-            } else if (count === 2) {
-                countersContainer.classList.add('two-counters');
-            } else if (count === 3) {
-                countersContainer.classList.add('three-counters');
-            } else if (count === 4) {
-                countersContainer.classList.add('four-counters');
-            } else if (count === 5) {
-                countersContainer.classList.add('five-counters');
-            } else if (count >= 6) {
-                countersContainer.classList.add('six-plus-counters');
             }
         }
 
-        // Toggle dropdown menu
         function toggleMenu(counterId, event) {
             event.stopPropagation();
             
-            // Close any other open menus
             if (activeMenu && activeMenu !== counterId) {
                 const previousMenu = document.querySelector(`[data-counter-id="${activeMenu}"] .dropdown-menu`);
                 if (previousMenu) {
@@ -867,7 +694,7 @@
             activeMenu = null;
         }
 
-        // Show set value modal
+        // Show set value 
         function showSetValueModal(counterId) {
             currentCounterId = counterId;
             const counter = counters.find(c => c.id === counterId);
@@ -879,7 +706,7 @@
             }
         }
 
-        // Set counter value from modal
+        // Set counter value
         function setCounterValue() {
             if (currentCounterId === null) return;
             
@@ -938,8 +765,6 @@
         function incrementCounter(id, event) {
             if (event) {
                 event.stopPropagation();
-                lastUsedButton = { type: 'increment', id: id };
-                activateKeyboard();
             }
             
             const counter = counters.find(c => c.id === id);
@@ -956,8 +781,6 @@
         function decrementCounter(id, event) {
             if (event) {
                 event.stopPropagation();
-                lastUsedButton = { type: 'decrement', id: id };
-                activateKeyboard();
             }
             
             const counter = counters.find(c => c.id === id);
@@ -970,40 +793,15 @@
             }
         }
 
-        // Handle keyboard input for last used button
         function handleKeyboardInput(event) {
-            if (!isKeyboardActive || !lastUsedButton) return;
-            
             const key = event.key;
             
-            // Only process number keys and some special keys
-            if (/^[0-9]$/.test(key)) {
-                // Pressing number keys multiple times
-                const counter = counters.find(c => c.id === lastUsedButton.id);
-                if (counter) {
-                    const incrementValue = parseInt(key);
-                    if (lastUsedButton.type === 'increment') {
-                        counter.value += incrementValue;
-                    } else if (lastUsedButton.type === 'decrement' && counter.value >= incrementValue) {
-                        counter.value -= incrementValue;
-                    }
-                    animateCounterValue(lastUsedButton.id);
-                    saveCounters();
-                    updateTotalCountDisplay();
-                    renderCounters();
+            if (key === 'Escape') {
+                closeAllMenus();
+                if (setValueModal.classList.contains('show')) {
+                    setValueModal.classList.remove('show');
+                    currentCounterId = null;
                 }
-                activateKeyboard(); // Reset timer
-            } else if (key === 'Enter' || key === ' ') {
-                // Enter or Space to trigger the last action once
-                if (lastUsedButton.type === 'increment') {
-                    incrementCounter(lastUsedButton.id);
-                } else if (lastUsedButton.type === 'decrement') {
-                    decrementCounter(lastUsedButton.id);
-                }
-                activateKeyboard(); // Reset timer
-            } else if (key === 'Escape') {
-                // Escape to clear last used button
-                deactivateKeyboard();
             }
         }
 
@@ -1020,6 +818,19 @@
                 saveCounters();
             }
         }
+        
+        // Delete all counters
+        function deleteAllCounters() {
+            if (counters.length === 0) return;
+            
+            if (confirm("Are you sure you want to delete ALL counters? This action cannot be undone.")) {
+                counters = [];
+                counterId = 0; 
+                updateTotalCountDisplay();
+                renderCounters();
+                saveCounters();
+            }
+        }
 
         // Update counter name
         function updateCounterName(id, newName) {
@@ -1027,7 +838,6 @@
             if (counter) {
                 counter.name = newName || `Counter ${id + 1}`;
                 saveCounters();
-                updateTotalCountDisplay();
             }
         }
 
@@ -1087,32 +897,23 @@
                     <div class="counter-controls">
                         <button class="decrement-btn" onclick="decrementCounter(${counter.id}, event)">
                             <i class="fas fa-minus"></i>
-                            <span class="keyboard-hint">Press any number key</span>
+                            <span class="keyboard-hint">Disabled</span> 
                         </button>
                         <button class="increment-btn" onclick="incrementCounter(${counter.id}, event)">
                             <i class="fas fa-plus"></i>
-                            <span class="keyboard-hint">Press any number key</span>
+                            <span class="keyboard-hint">Disabled</span>
                         </button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Theme toggle functionality
+        // Theme toggle
         function toggleTheme() {
             const body = document.body;
-            const isDark = body.style.getPropertyValue('--bg-primary') === '#f8fafc';
+            const isDark = body.style.getPropertyValue('--bg-primary') !== '#f8fafc';
             
             if (isDark) {
-                // Switch to dark mode
-                body.style.setProperty('--bg-primary', '#0f172a');
-                body.style.setProperty('--bg-secondary', '#1e293b');
-                body.style.setProperty('--bg-tertiary', '#334155');
-                body.style.setProperty('--text-primary', '#f8fafc');
-                body.style.setProperty('--text-secondary', '#cbd5e1');
-                body.style.setProperty('--border-color', '#475569');
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-            } else {
                 // Switch to light mode
                 body.style.setProperty('--bg-primary', '#f8fafc');
                 body.style.setProperty('--bg-secondary', '#e2e8f0');
@@ -1121,12 +922,43 @@
                 body.style.setProperty('--text-secondary', '#475569');
                 body.style.setProperty('--border-color', '#cbd5e1');
                 themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                // Switch to dark mode
+                body.style.setProperty('--bg-primary', '#0f172a');
+                body.style.setProperty('--bg-secondary', '#1e293b');
+                body.style.setProperty('--bg-tertiary', '#334155');
+                body.style.setProperty('--text-primary', '#f8fafc');
+                body.style.setProperty('--text-secondary', '#cbd5e1');
+                body.style.setProperty('--border-color', '#475569');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
             }
+        }
+        
+        // Initializer
+        function initializeFromCookies() {
+            const countersCookie = getCookie('multiCounters');
+            
+            if (countersCookie) {
+                try {
+                    counters = JSON.parse(countersCookie);
+                    counterId = counters.length > 0 ? Math.max(...counters.map(c => c.id)) + 1 : 0;
+                } catch (e) {
+                    counters = [];
+                    counterId = 0;
+                    addCounter();
+                }
+            } else {
+                addCounter();
+            }
+            
+            updateTotalCountDisplay();
+            renderCounters();
         }
 
         // Event listeners
         addCounterBtn.addEventListener('click', addCounter);
         resetAllBtn.addEventListener('click', resetAllCounters);
+        deleteAllBtn.addEventListener('click', deleteAllCounters);
         themeToggle.addEventListener('click', toggleTheme);
         confirmSetValue.addEventListener('click', setCounterValue);
         cancelSetValue.addEventListener('click', () => {
@@ -1134,7 +966,7 @@
             currentCounterId = null;
         });
 
-        // Keyboard event listener
+        // Global keyboard event listener
         document.addEventListener('keydown', handleKeyboardInput);
 
         // Close modal when clicking outside
@@ -1148,9 +980,10 @@
         // Close dropdowns when clicking outside
         document.addEventListener('click', closeAllMenus);
 
-        // Handle Enter key in modal input
+
         setValueInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                e.preventDefault(); 
                 setCounterValue();
             }
         });
